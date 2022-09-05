@@ -1,10 +1,11 @@
-import React from 'react';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import Filter from './tabs/Filter';
+import React, { useState } from "react";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
+import Filter from "./tabs/Filter";
+import Favorites from "./tabs/Favorites";
+import { Favorite } from "../../utils/types";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -23,11 +24,7 @@ function TabPanel(props: TabPanelProps) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
     </div>
   );
 }
@@ -35,30 +32,47 @@ function TabPanel(props: TabPanelProps) {
 function a11yProps(index: number) {
   return {
     id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
   };
 }
 
-export default function SideBar() {
-  const [value, setValue] = React.useState(0);
+interface SidebarProps {
+  favoritesList: Favorite[];
+  handleDeleteFavorite: (value: Favorite) => void;
+  handleAddFavorite: (value: Favorite) => void;
+}
+
+export default function SideBar({
+  favoritesList,
+  handleAddFavorite,
+  handleDeleteFavorite,
+}: SidebarProps) {
+  const [value, setValue] = useState<number>(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
   return (
-    <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+    <Paper sx={{ width: "100%", overflow: "hidden" }}>
+      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          aria-label="basic tabs example"
+        >
           <Tab label="Enfermedad" {...a11yProps(0)} />
           <Tab label="Favoritos" {...a11yProps(1)} />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        <Filter />
+        <Filter addFavorite={handleAddFavorite} />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Favoritos
+        <Favorites
+          favoritesList={favoritesList}
+          deleteFavorite={handleDeleteFavorite}
+        />
       </TabPanel>
     </Paper>
   );
