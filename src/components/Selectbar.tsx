@@ -26,7 +26,7 @@ export default function Selectbar({
   return (
     <Stack direction="row" spacing={2}>
       <FormControl fullWidth>
-        <InputLabel id="years">Year</InputLabel>
+        <InputLabel id="years">Años</InputLabel>
         <Select
           labelId="years"
           id="select-years"
@@ -43,7 +43,7 @@ export default function Selectbar({
         </Select>
       </FormControl>
       <FormControl fullWidth>
-        <InputLabel id="tags">Favorites</InputLabel>
+        <InputLabel id="tags">Favoritos</InputLabel>
         <Select
           labelId="tags"
           id="select-tags"
